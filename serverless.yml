@@ -1,0 +1,31 @@
+service: myservice
+
+frameworkVersion: '2'
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  lambdaHashingVersion: 20201221
+  region: eu-central-1
+
+functions:
+  authorizer:
+    handler: authorizer.handler
+  hello:
+    handler: handler.hello
+    events:
+      - http:
+          path: /hello
+          method: GET
+          authorizer:
+            name: authorizer
+            type: TOKEN
+  bye:
+    handler: handler.bye
+    events:
+      - http:
+          path: /bye
+          method: GET
+          authorizer:
+            name: authorizer
+            type: REQUEST
