@@ -28,4 +28,4 @@ functions:
           method: GET
           authorizer:
             name: authorizer
-            type: REQUEST
+            type: TOKEN

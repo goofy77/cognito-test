@@ -1,25 +1,15 @@
-const {verify} = require('./jwtHandler.js')
+const { verify } = require('./jwtHandler.js')
 
-exports.handler =  async (event, context) => {
-    console.log({event, context})
+exports.handler = async (event) => {
     const token = event.authorizationToken;
-    const result = await verify(token)
-    console.log({ result })
-    switch (token) {
-        case 'allow':
-            return generatePolicy('user', 'Allow', event.methodArn);
-        case 'deny':
-            return generatePolicy('user', 'Deny', event.methodArn);
-        case 'unauthorized':
-            return generatePolicy("Unauthorized");
-        default:
-            return "Error: Invalid token";
-    }
-
+    const result = await verify(token);
+    // check token clams/groups/IDML roles...
+    // response with appropriate policy
+    return generatePolicy(result['cognito:username'], 'Allow', event.methodArn);
 };
 
 // Help function to generate an IAM policy
-var generatePolicy = function(principalId, effect, resource) {
+var generatePolicy = function (principalId, effect, resource) {
     var authResponse = {};
 
     authResponse.principalId = principalId;
